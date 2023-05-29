@@ -1,10 +1,10 @@
-import { createBrowserRouter } from "react-router-dom";
-import Root from "./Root";
-import Users from "./Users";
-import Sessions from "./Sessions";
+import { createHashRouter } from "react-router-dom";
 import Records from "./Records";
+import Root from "./Root";
+import Sessions from "./Sessions";
+import Users from "./Users";
 
-export const router = createBrowserRouter([
+export const router = createHashRouter([
   {
     path: "/",
     element: <Root />,
