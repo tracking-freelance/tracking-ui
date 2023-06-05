@@ -1,34 +1,75 @@
-import PersonIcon from "@mui/icons-material/Person";
-import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { HeatMapOutlined, PlayCircleOutlined } from "@ant-design/icons";
+import { Breadcrumb, Layout, Menu, theme } from "antd";
+import { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import MyBreadCrumbs from "../components/Breadcrumb";
+const { Header, Content, Footer, Sider } = Layout;
 
-export default function Root() {
-  const v = useNavigate();
-  return (
-    <Box sx={{ width: "100vw", height: "100vh", bgcolor: "background.paper", display: "flex" }}>
-      <Box sx={{ borderRight: "1px solid #cccccc" }}>
-        <List>
-          <ListItem>
-            <ListItemButton
-              onClick={() => {
-                v("/users");
-              }}
-            >
-              <ListItemIcon>
-                <PersonIcon />
-              </ListItemIcon>
-              <ListItemText primary="Users"></ListItemText>
-            </ListItemButton>
-          </ListItem>
-        </List>
-      </Box>
-      <Box sx={{ flexGrow: 1, padding: "0 20px", display: "flex", flex: 1, flexDirection: "column" }}>
-        {/* <MyBreadCrumbs /> */}
-        <Box sx={{ marginTop: "20px" }}>
-          <Outlet />
-        </Box>
-      </Box>
-    </Box>
-  );
+function getItem(label, key, icon, children) {
+  return {
+    key,
+    icon,
+    children,
+    label
+  };
 }
+const items = [getItem("Recordings", "1", <PlayCircleOutlined />, [getItem("All users ", "sub-1")]), getItem("Heatmaps", "2", <HeatMapOutlined />)];
+
+const Root = () => {
+  const [collapsed, setCollapsed] = useState(false);
+  const {
+    token: { colorBgContainer }
+  } = theme.useToken();
+  const navigate = useNavigate();
+
+  const onMenuClick = ({ key }) => {
+    switch (key) {
+      case "sub-1":
+        navigate("/recordings");
+    }
+    console.log(key);
+  };
+
+  return (
+    <Layout
+      style={{
+        minHeight: "100vh"
+      }}
+    >
+      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+        <div className="demo-logo-vertical" />
+        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" items={items} onClick={onMenuClick} />
+      </Sider>
+      <Layout>
+        <Header
+          style={{
+            padding: 0,
+            background: colorBgContainer
+          }}
+        />
+        <Content
+          style={{
+            margin: "0 16px"
+          }}
+        >
+          <Breadcrumb
+            style={{
+              margin: "16px 0"
+            }}
+          >
+            <Breadcrumb.Item>User</Breadcrumb.Item>
+            <Breadcrumb.Item>Bill</Breadcrumb.Item>
+          </Breadcrumb>
+          <Outlet />
+        </Content>
+        <Footer
+          style={{
+            textAlign: "center"
+          }}
+        >
+          Ant Design ©2023 Created by Ant UED
+        </Footer>
+      </Layout>
+    </Layout>
+  );
+};
+export default Root;

@@ -3,14 +3,16 @@ import Records from "./Records";
 import Root from "./Root";
 import Sessions from "./Sessions";
 import Users from "./Users";
+import ErrorPage from "./Error";
 
 export const router = createHashRouter([
   {
     path: "/",
     element: <Root />,
+    errorElement: <ErrorPage />,
     children: [
       {
-        path: "/users",
+        path: "/recordings",
         element: <Users />
       },
       {
